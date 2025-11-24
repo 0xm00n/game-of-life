@@ -1,0 +1,31 @@
+# Build
+build/
+build-*/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.cmake
+CTestTestfile.cmake
+_deps/
+
+# Binaries 
+gol
+tests
+*.o
+*.so
+*.a
+
+# Compiled shaders
+shaders/*.spv
+
+# Editor temp files
+*.swp
+*~
+
+# Profiling/debugging
+*.prof
+callgrind.out.*
+perf.data*
+vgcore.*
