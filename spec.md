@@ -73,49 +73,7 @@ game-of-life/
 
 ---
 
-## Phase 2: Testing & Validation (CURRENT)
-
-### Goals
-Rigorous testing of Grid and Simulator with known patterns before adding complexity.
-
-### Test Patterns to Implement
-
-#### Still Lifes (stable patterns)
-- **Block** (2x2 square)
-- **Beehive** (6 cells)
-- **Loaf** (7 cells)
-- **Boat** (5 cells)
-
-#### Oscillators (periodic patterns)
-- **Blinker** (period 2) **Already tested**
-- **Toad** (period 2)
-- **Beacon** (period 2)
-- **Pulsar** (period 3)
-
-#### Spaceships (moving patterns)
-- **Glider** (moves diagonally, period 4)
-- **Lightweight spaceship (LWSS)** (period 4)
-
-#### Complex Patterns
-- **Glider Gun** (Gosper's - creates gliders infinitely)
-- **Puffer train** (leaves debris)
-
-### Testing Strategy
-1. Create `patterns/` directory with pattern definitions
-2. Implement pattern loader (RLE format optional, manual for now)
-3. Add pattern library helper functions
-4. Test each pattern manually in `main.cpp`
-5. Verify behavior matches expected evolution
-
-### Success Criteria
-- Still lifes remain stable for 100+ generations
-- Oscillators return to original state after correct period
-- Gliders move correctly (diagonal, 4 generations per cell)
-- No crashes, memory leaks, or incorrect behavior
-
----
-
-## Phase 3: Unit Testing
+## Phase 2: Unit Testing (CURRENT)
 
 ### Goals
 Automated testing infrastructure using Google Test.
@@ -179,7 +137,7 @@ gtest_discover_tests(tests)
 
 ---
 
-## Phase 4: Visualization (Vulkan + GLFW)
+## Phase 3: Visualization (Vulkan + GLFW)
 
 ### Goals
 Real-time graphical rendering with interactive camera controls.
@@ -230,7 +188,7 @@ Real-time graphical rendering with interactive camera controls.
 
 ---
 
-## Phase 5: Performance Optimization
+## Phase 4: Performance Optimization
 
 ### Goals
 Scale to millions of active cells with GPU acceleration and multi-threading.
@@ -272,7 +230,7 @@ Scale to millions of active cells with GPU acceleration and multi-threading.
 
 ---
 
-## Phase 6: Multi-Scale Architecture
+## Phase 5: Multi-Scale Architecture
 
 ### Goals
 Hierarchical grid structure supporting infinite zoom and meta-cellular automata.
@@ -308,7 +266,7 @@ Hierarchical grid structure supporting infinite zoom and meta-cellular automata.
 
 ---
 
-## Phase 7: Pattern Library & Tools
+## Phase 6: Pattern Library & Tools
 
 ### Goals
 Rich collection of patterns and tools for exploration.
@@ -353,7 +311,7 @@ Rich collection of patterns and tools for exploration.
 
 ---
 
-## Phase 8: Rule 110 (1D Cellular Automaton)
+## Phase 7: Rule 110 (1D Cellular Automaton)
 
 ### Goals
 Implement and visualize Rule 110, demonstrating Turing completeness.
@@ -395,7 +353,7 @@ Implement and visualize Rule 110, demonstrating Turing completeness.
 
 ---
 
-## Phase 9: Self-Replication (Meta-GoL)
+## Phase 8: Self-Replication (Meta-GoL)
 
 ### Goals
 Implement Game of Life simulating itself - the ultimate demonstration of emergence.
@@ -578,20 +536,18 @@ game-of-life/
 
 ## Current Status
 
-**Phase 1**: COMPLETED
+**Phase 1**: COMPLETED (Foundation - Grid, Simulator, Conway's rules)
 
-**Phase 2**: IN PROGRESS (Testing patterns)
+**Phase 2**: IN PROGRESS (Unit testing with Google Test)
 
-**Phase 3**: PENDING (Unit tests)
+**Phase 3**: PENDING (Vulkan visualization)
 
-**Phase 4**: PENDING (Visualization)
+**Phase 4**: PENDING (Performance optimization)
 
-**Phase 5**: PENDING (Optimization)
+**Phase 5**: PENDING (Multi-scale architecture)
 
-**Phase 6**: PENDING (Multi-scale)
+**Phase 6**: PENDING (Pattern library & tools)
 
-**Phase 7**: PENDING (Pattern library)
+**Phase 7**: PENDING (Rule 110)
 
-**Phase 8**: PENDING (Rule 110)
-
-**Phase 9**: PENDING (Meta-GoL)
+**Phase 8**: PENDING (Meta-GoL)
