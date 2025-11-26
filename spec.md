@@ -73,7 +73,7 @@ game-of-life/
 
 ---
 
-## Phase 2: Unit Testing (CURRENT)
+## Phase 2: Unit Testing (COMPLETED)
 
 ### Goals
 Automated testing infrastructure using Google Test.
