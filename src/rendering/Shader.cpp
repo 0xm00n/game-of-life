@@ -55,3 +55,8 @@ void Shader::set_mat4(const char* name, const float* matrix) {
     GLint loc = glGetUniformLocation(program, name);
     glUniformMatrix4fv(loc, 1, GL_FALSE, matrix);
 }
+
+void Shader::set_float(const char* name, float value) {
+    GLint loc = glGetUniformLocation(program, name);
+    glUniform1f(loc, value);
+}

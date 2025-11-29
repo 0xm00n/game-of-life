@@ -15,7 +15,7 @@ add_executable(gol
     src/rendering/Window.cpp
     src/rendering/Shader.cpp
     src/rendering/Renderer.cpp
-    # src/rendering/Camera.cpp
+    src/rendering/Camera.cpp
 )
 target_include_directories(gol PRIVATE include)
 target_link_libraries(gol glfw OpenGL::GL GLEW::GLEW)

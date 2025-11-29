@@ -17,4 +17,6 @@ public:
 
     // set uniforms
     void set_mat4(const char* name, const float* matrix);
+
+    void set_float(const char* name, float value);
 };
