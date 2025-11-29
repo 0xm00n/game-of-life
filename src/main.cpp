@@ -1,35 +1,38 @@
-#include "simulation/Simulator.h"
-#include <iostream>
+#include "rendering/Window.h"
+#include "rendering/Shader.h"
+#include "rendering/Renderer.h"
 
-void print_grid(const Grid& grid) {
-    for (int y = 0; y < grid.get_height(); y++) {
-        for (int x = 0; x < grid.get_width(); x++) {
-            std::cout << (grid.is_alive(x, y) ? "◼" : "◻");
-        }
-        std::cout << "\n";
-    }
-    std::cout << "\n";
+const char* vertex_source = R"(
+#version 460 core
+layout (location = 0) in vec2 aPos;
+
+void main() {
+    gl_Position = vec4(aPos, 0.0, 1.0);
 }
+)";
+
+const char* fragment_source = R"(
+#version 460 core
+out vec4 frag_color;
+
+void main() {
+    frag_color = vec4(1.0, 1.0, 1.0, 1.0);
+}
+)";
 
 int main() {
-    Simulator sim = Simulator(20, 20);
+    Window win(800, 600, "Game of Life");
+    Shader shader(vertex_source, fragment_source);
+    Renderer renderer;
 
-    sim.set_cell(6, 5, true);   // . ◼ .
-    sim.set_cell(7, 6, true);   // . . ◼
-    sim.set_cell(5, 7, true);   // ◼ ◼ ◼
-    sim.set_cell(6, 7, true);
-    sim.set_cell(7, 7, true);
+    while (win.is_open()) {
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-    std::cout << "Generation 0:\n";
-    print_grid(sim.get_grid());
+        shader.use();
+        renderer.draw();
 
-    // Run and print every 4 generations
-    for (int gen = 1; gen <= 20; gen++) {
-        sim.step();
-        if (gen % 4 == 0) {
-            std::cout << "\nGeneration " << gen << ":\n";
-            print_grid(sim.get_grid());
-        }
+        win.update();
     }
 
     return 0;

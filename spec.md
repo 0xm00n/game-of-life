@@ -13,12 +13,12 @@ A high-performance C++ implementation of Conway's Game of Life and other cellula
 ## Tech Stack
 - **Language**: C++23
 - **Build System**: CMake 3.20+
-- **Graphics**: Vulkan 1.3+ (or CUDA + OpenGL for GPU compute)
+- **Graphics**: OpenGL 4.6 + GLFW 3.4+ (simpler setup, sufficient for 2D rendering)
+- **GPU Compute**: CUDA 13.0 (for simulation acceleration in Phase 4)
 - **Math Library**: GLM 1.0+
 - **Testing**: Google Test (latest)
 - **Threading**: C++23 `std::jthread`, parallel algorithms
 - **SIMD**: AVX2 intrinsics (standard on Raptor Lake)
-- **Window Management**: GLFW 3.4+
 
 ## Perf Targets
 - **VRAM Usage**: <2GB
@@ -132,12 +132,12 @@ gtest_discover_tests(tests)
 
 ### Success Criteria
 - All tests pass
-- Code coverage >80%
+- Code coverage >80% (currently 100% line and function coverage)
 - No memory leaks (valgrind/sanitizers)
 
 ---
 
-## Phase 3: Visualization (Vulkan + GLFW)
+## Phase 3: Visualization (OpenGL + GLFW)
 
 ### Goals
 Real-time graphical rendering with interactive camera controls.
@@ -147,33 +147,32 @@ Real-time graphical rendering with interactive camera controls.
 #### Window Management
 - GLFW window creation (2560x1440 or windowed)
 - Input handling (keyboard, mouse)
-- Event loop
+- Event loop with vsync
 
-#### Vulkan Renderer
-- Vulkan instance, device, swapchain setup
-- Graphics pipeline for cell rendering
+#### OpenGL Renderer
+- OpenGL 4.6 core profile context
+- Simple shader program (vertex + fragment)
 - Instanced rendering (one draw call for all cells)
-- Vertex buffer for quad (2 triangles per cell)
-- Fragment shader for cell coloring
-- Efficient buffer updates (only changed regions)
+- Vertex buffer for unit quad
+- Instance buffer for cell positions
+- Efficient buffer updates (orphaning or persistent mapping)
 
 #### Camera System
-- 2D orthographic projection
+- 2D orthographic projection (GLM)
 - Pan (WASD or arrow keys)
 - Zoom (mouse wheel)
 - Smooth interpolation for camera movement
 
-#### Rendering Optimizations
-- **Frustum culling**: Only render visible cells
-- **Dynamic vertex buffers**: Stream only visible/changed cells
-- **Instanced rendering**: Minimize draw calls
+#### Rendering Strategy
+- **Point sprites or instanced quads**: One vertex per cell or instanced unit quad
+- **Frustum culling**: Only upload visible cells to GPU
+- **Dynamic instance buffer**: Stream visible cell positions each frame
 - **Grid overlay** (optional): Show cell boundaries at high zoom
 
 #### Visual Effects
 - Color schemes (grayscale, heat map, age-based)
 - Cell trails/fading (cells dim over time)
 - Grid lines at appropriate zoom levels
-- Smooth animations between generations
 
 ### Performance Targets
 - 60 FPS @ 2K resolution
@@ -413,10 +412,9 @@ game-of-life/
 │   │   ├── Rule110.h                 # 1D CA engine
 │   │   └── MetaSimulator.h           # Hierarchical simulation
 │   ├── rendering/
-│   │   ├── VulkanRenderer.h          # Vulkan abstraction
+│   │   ├── Renderer.h                # OpenGL renderer
 │   │   ├── Camera.h                  # 2D camera system
-│   │   ├── Shader.h                  # Shader management
-│   │   └── FrameBuffer.h             # Rendering targets
+│   │   └── Shader.h                  # Shader loading/compilation
 │   ├── patterns/
 │   │   ├── PatternLoader.h           # RLE/Plaintext parser
 │   │   ├── PatternLibrary.h          # Built-in patterns
@@ -433,9 +431,8 @@ game-of-life/
 │   ├── patterns/
 │   └── utils/
 ├── shaders/
-│   ├── cell.vert                     # Vertex shader
-│   ├── cell.frag                     # Fragment shader
-│   └── compile.sh                    # SPIR-V compilation
+│   ├── cell.vert                     # Vertex shader (GLSL)
+│   └── cell.frag                     # Fragment shader (GLSL)
 ├── kernels/
 │   └── gol.cu                        # CUDA kernels (optional)
 ├── tests/
@@ -527,7 +524,8 @@ game-of-life/
 - [Quest for Tetris](https://codegolf.stackexchange.com/questions/11880/build-a-working-game-of-tetris-in-conways-game-of-life)
 
 ### Technical Resources
-- [Vulkan Tutorial](https://vulkan-tutorial.com/)
+- [LearnOpenGL](https://learnopengl.com/) - Modern OpenGL tutorial
+- [OpenGL Reference](https://www.khronos.org/opengl/) - Official documentation
 - [C++23 Features](https://en.cppreference.com/w/cpp/23)
 - [Intel Intrinsics Guide](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/)
 - [CUDA Programming Guide](https://docs.nvidia.com/cuda/cuda-c-programming-guide/)
@@ -540,7 +538,7 @@ game-of-life/
 
 **Phase 2**: COMPLETED (Unit testing with Google Test)
 
-**Phase 3**: IN PROGRESS (Vulkan visualization)
+**Phase 3**: IN PROGRESS (OpenGL visualization)
 
 **Phase 4**: PENDING (Performance optimization)
 
