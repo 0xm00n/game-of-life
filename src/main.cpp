@@ -5,6 +5,8 @@
 #include "rendering/Camera.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
+#include <string>
+#include <algorithm>
 
 const char* grid_vertex_source = R"(
 #version 460 core
@@ -80,7 +82,14 @@ int main() {
     int frame_cnt = 0;
     int steps_per_sec = 2;
 
+    int generation = 0;
+
     while (win.is_open()) {
+        std::string title = "Game of Life - Generation: " + std::to_string(generation) +
+                            " | Speed: " + std::to_string(steps_per_sec) + "/s" +
+                            (paused ? " [PAUSED]" : "");
+        glfwSetWindowTitle(handle, title.c_str());
+
         int width, height;
         glfwGetFramebufferSize(win.get_handle(), &width, &height);
         glViewport(0, 0, width, height);
@@ -103,11 +112,26 @@ int main() {
         }
         space_was_pressed = space_pressed;
 
+        static bool up_was_pressed = false;
+        bool up_pressed = glfwGetKey(handle, GLFW_KEY_UP) == GLFW_PRESS;
+        if (up_pressed && !up_was_pressed) {
+            steps_per_sec = std::min(steps_per_sec + 1, 60);
+        }
+        up_was_pressed = up_pressed;
+
+        static bool down_was_pressed = false;
+        bool down_pressed = glfwGetKey(handle, GLFW_KEY_DOWN) == GLFW_PRESS;
+        if (down_pressed && !down_was_pressed) {
+            steps_per_sec = std::max(steps_per_sec - 1, 1);
+        }
+        down_was_pressed = down_pressed;
+
         // step once with right arrow
         static bool right_was_pressed = false;
         bool right_pressed = glfwGetKey(handle, GLFW_KEY_RIGHT) == GLFW_PRESS;
         if (right_pressed &&  !right_was_pressed) {
             sim.step();
+            generation++;
         }
         right_was_pressed = right_pressed;
 
@@ -115,6 +139,7 @@ int main() {
             frame_cnt++;
             if (frame_cnt >= 60 / steps_per_sec) {
                 sim.step();
+                generation++;
                 frame_cnt = 0;
             }
         }
